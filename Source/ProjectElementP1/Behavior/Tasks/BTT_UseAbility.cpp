@@ -7,7 +7,10 @@ EBTNodeResult::Type UBTT_UseAbility::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 {
 	AEnemyController* controllerPtr = Cast<AEnemyController>(OwnerComp.GetAIOwner());
 	if (controllerPtr == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can't use the ability of %s"), *OwnerComp.GetAIOwner()->GetName());
 		return EBTNodeResult::Failed;
+	}
 
 	controllerPtr->OnAbilityUse.Broadcast(AbilityType);
 	

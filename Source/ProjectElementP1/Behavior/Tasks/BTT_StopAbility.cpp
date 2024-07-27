@@ -7,9 +7,12 @@ EBTNodeResult::Type UBTT_StopAbility::ExecuteTask(UBehaviorTreeComponent& OwnerC
 {
 	AEnemyController* controllerPtr = Cast<AEnemyController>(OwnerComp.GetAIOwner());
 	if (controllerPtr == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Can't stop the ability of %s"), *OwnerComp.GetAIOwner()->GetName());
 		return EBTNodeResult::Failed;
+	}
 
-	controllerPtr->OnAbilityUse.Broadcast(AbilityType);
+	controllerPtr->OnAbilityStop.Broadcast(AbilityType);
 	
 	return Super::ExecuteTask(OwnerComp, NodeMemory);
 }
