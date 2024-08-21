@@ -18,7 +18,8 @@ void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UA
 	const uint8 abilityNr{ static_cast<uint8>(abilitySlot) };
 	AbilityTypes[abilityNr] = abilityType;
 	StopAbility(abilitySlot);
-	m_Abilities[abilityNr]->DestroyComponent();
+	if (m_Abilities[abilityNr] != nullptr)
+		m_Abilities[abilityNr]->DestroyComponent();
 	m_Abilities[abilityNr] = CreateAbility(abilityType);
 }
 
