@@ -20,5 +20,5 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
-	EAbilityType AbilityType{ EAbilityType::none };
+	EAbilitySlot AbilityType{ EAbilitySlot::none };
 };
