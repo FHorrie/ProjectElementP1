@@ -1,0 +1,8 @@
+* Common dimensions for Project Element
+
+** Outside
+
+*** Street Width: 6m
+*** Pavement Width: 3.25m
+*** House Height: 4m - 7m
+
