@@ -5,11 +5,11 @@
 
 #include "CoreMinimal.h"
 #include "Runtime/AIModule/Classes/AIController.h"
-#include "ProjectElementP1/Components/AbilityComponent.h"
+#include "ProjectElementP1/Components/EquipmentComponent.h"
 #include "EnemyController.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityUse, EAbilityType);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityStop, EAbilityType);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityUse, EAbilitySlot);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityStop, EAbilitySlot);
 
 UCLASS()
 class PROJECTELEMENTP1_API AEnemyController final : public AAIController
