@@ -17,6 +17,9 @@ public:
 	// Sets default values for this component's properties
 	UDeathComponent();
 
+	UFUNCTION(BlueprintCallable)
+	void Die();
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
 	FOnDeath DeathDelegate {};
 };
