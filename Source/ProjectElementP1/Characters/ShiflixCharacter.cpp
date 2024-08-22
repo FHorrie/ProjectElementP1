@@ -4,6 +4,7 @@
 #include "ShiflixCharacter.h"
 
 #include "EnemyController.h"
+#include "ProjectElementP1/Components/DeathComponent.h"
 #include "ProjectElementP1/Components/EquipmentComponent.h"
 
 
@@ -14,6 +15,7 @@ AShiflixCharacter::AShiflixCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Equipment = CreateDefaultSubobject<UEquipmentComponent>(TEXT("Equipment"));
+	DeathHandler = CreateDefaultSubobject<UDeathComponent>(TEXT("DeathHandler"));
 }
 
 void AShiflixCharacter::PossessedBy(AController* NewController)

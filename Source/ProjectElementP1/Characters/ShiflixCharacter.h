@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ShiflixCharacter.generated.h"
 
+
+class UDeathComponent;
 class UEquipmentComponent;
 
 UCLASS()
@@ -18,8 +20,11 @@ public:
 	AShiflixCharacter();
 	
 	virtual void PossessedBy(AController* NewController) override;
-
+	
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	UEquipmentComponent* Equipment{ nullptr };
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	UDeathComponent* DeathHandler{ nullptr };
 };
