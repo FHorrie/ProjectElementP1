@@ -24,7 +24,7 @@ void AShiflixCharacter::PossessedBy(AController* NewController)
 
 	if (AEnemyController* controllerPtr = Cast<AEnemyController>(NewController))
 	{
-		controllerPtr->OnAbilityStop.AddUObject(Equipment, &UEquipmentComponent::UseAbility);
+		controllerPtr->OnAbilityUse.AddUObject(Equipment, &UEquipmentComponent::UseAbility);
 		controllerPtr->OnAbilityStop.AddUObject(Equipment, &UEquipmentComponent::StopAbility);
 	}
 }
