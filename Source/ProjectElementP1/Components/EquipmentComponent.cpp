@@ -15,6 +15,12 @@ UEquipmentComponent::UEquipmentComponent()
 
 void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UAbilityComponent> abilityType)
 {
+	if (!IsSlotValid(abilitySlot) || abilityType == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No ability entered on %s"), *GetOwner()->GetName());
+		return;
+	}
+	
 	const uint8 abilityNr{ static_cast<uint8>(abilitySlot) };
 	AbilityTypes[abilityNr] = abilityType;
 	StopAbility(abilitySlot);
