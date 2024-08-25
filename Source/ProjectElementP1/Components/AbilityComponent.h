@@ -24,4 +24,8 @@ public:
 	void Stop();
 	UFUNCTION(BlueprintImplementableEvent)
 	void Reset();
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	FString Name{};
 };
