@@ -2,3 +2,8 @@
 
 
 #include "AbilityComponent.h"
+
+const FString& UAbilityComponent::GetAbilityName() const
+{
+	return Name;
+}

@@ -27,6 +27,8 @@ void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UA
 	if (m_Abilities[abilityNr] != nullptr)
 		m_Abilities[abilityNr]->DestroyComponent();
 	m_Abilities[abilityNr] = CreateAbility(abilityType);
+
+	AbilitySwitchDelegate.Broadcast(abilityType, abilitySlot, m_Abilities[abilityNr]->GetAbilityName());
 }
 
 void UEquipmentComponent::UseAbility(EAbilitySlot abilitySlot)
@@ -60,8 +62,16 @@ void UEquipmentComponent::BeginPlay()
 	
 	// Fill abilities up
 	m_Abilities.Empty();
+	int idx{};
 	for (auto abilityType : AbilityTypes)
-		m_Abilities.Add(CreateAbility(abilityType));
+	{
+		UAbilityComponent* abilityPtr{ CreateAbility(abilityType) };
+		m_Abilities.Add(abilityPtr);
+		if(abilityPtr != nullptr)
+			AbilityCreateDelegate.Broadcast(abilityType, static_cast<EAbilitySlot>(idx), abilityPtr->GetAbilityName());
+		++idx;
+	}
+		
 }
 
 UAbilityComponent* UEquipmentComponent::CreateAbility(TSubclassOf<UAbilityComponent> abilityType) const
@@ -83,6 +93,8 @@ bool UEquipmentComponent::IsSlotValid(EAbilitySlot abilitySlot) const
 
 UAbilityComponent* UEquipmentComponent::GetAbility(EAbilitySlot abilitySlot) const
 {
+	if (m_Abilities.IsEmpty())
+		return nullptr;
 	return m_Abilities[static_cast<uint8>(abilitySlot)];
 }
 

@@ -5,7 +5,6 @@
 
 #include "AbilityComponent.h"
 
-
 bool FInventorySlot::operator==(const FInventorySlot& other) const
 {
 	return other.abilitySlot == abilitySlot;
@@ -24,9 +23,12 @@ UInventoryHandlerComponent::UInventoryHandlerComponent()
 
 void UInventoryHandlerComponent::AddAbility(const FString& displayName, TSubclassOf<UAbilityComponent> abilityType, EAbilitySlot abilitySlot)
 {
-	check(abilityType == nullptr);
+	check(abilityType != nullptr);
 
-	const FInventorySlot slot{ displayName, abilityType, abilitySlot, 0 };
+	FInventorySlot slot{};
+	slot.displayName = displayName;
+	slot.abilityType = abilityType;
+	slot.abilitySlot = abilitySlot;
 	if (!HasAbility(abilityType))
 	{
 		NewAbilityDelegate.Broadcast(slot);
@@ -35,9 +37,12 @@ void UInventoryHandlerComponent::AddAbility(const FString& displayName, TSubclas
 	}
 	else
 	{
-		FInventorySlot& foundSlot{ m_Slots[m_Slots.Find(slot)] };
-		++foundSlot.nrUpgradeTokens;
-		AbilityDelegate.Broadcast(foundSlot);
+		FInventorySlot* foundSlot{ m_Slots.FindByPredicate([abilityType](const FInventorySlot& slot)
+		{
+			return slot.abilityType == abilityType;
+		}) };
+		++foundSlot->nrUpgradeTokens;
+		AbilityDelegate.Broadcast(*foundSlot);
 	}
 }
 

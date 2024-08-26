@@ -20,6 +20,8 @@ enum class EAbilitySlot : uint8
 	none UMETA(DisplayName = "None")
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAbilitySwitch, TSubclassOf<UAbilityComponent>, abilityType, EAbilitySlot, abilitySlot, const FString&, displayName);
+
 class UAbilityComponent;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -37,6 +39,14 @@ public:
 	void UseAbility(EAbilitySlot abilitySlot);
 	UFUNCTION(BlueprintCallable)
 	void StopAbility(EAbilitySlot abilitySlot);
+
+	UFUNCTION(BlueprintCallable)
+	UAbilityComponent* GetAbility(EAbilitySlot abilitySlot) const;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
+	FOnAbilitySwitch AbilitySwitchDelegate {};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
+	FOnAbilitySwitch AbilityCreateDelegate {};
 	
 protected:
 	// Called when the game starts
@@ -46,7 +56,7 @@ private:
 	UAbilityComponent* CreateAbility(TSubclassOf<UAbilityComponent> abilityType) const;
 
 	bool IsSlotValid(EAbilitySlot abilitySlot) const;
-	UAbilityComponent* GetAbility(EAbilitySlot abilitySlot) const;
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	TArray<TSubclassOf<UAbilityComponent>> AbilityTypes{};

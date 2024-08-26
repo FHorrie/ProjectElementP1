@@ -25,6 +25,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Reset();
 
+	const FString& GetAbilityName() const;
+	
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	FString Name{};

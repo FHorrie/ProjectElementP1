@@ -13,14 +13,14 @@ USTRUCT(BlueprintType)
 struct FInventorySlot
 {
 	GENERATED_BODY()
-
+	
 	bool operator==(const FInventorySlot& other) const;
 	bool operator==(TSubclassOf<UAbilityComponent> type) const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FString displayName{};
+	FString displayName;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TSubclassOf<UAbilityComponent> abilityType;;
+	TSubclassOf<UAbilityComponent> abilityType {nullptr };
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EAbilitySlot abilitySlot{};
 	int32_t nrUpgradeTokens{};
@@ -28,7 +28,7 @@ struct FInventorySlot
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnNewAbilityCollect, const FInventorySlot&, slot);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityCollect, const FInventorySlot&, slot);
-r
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class PROJECTELEMENTP1_API UInventoryHandlerComponent : public UActorComponent
 {
