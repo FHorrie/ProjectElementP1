@@ -15,7 +15,7 @@ UEquipmentComponent::UEquipmentComponent()
 
 void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UAbilityComponent> abilityType)
 {
-	if (!IsSlotValid(abilitySlot) || abilityType == nullptr)
+	if (abilitySlot > EAbilitySlot::NR_ABILITIES || abilityType == nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No ability entered on %s"), *GetOwner()->GetName());
 		return;
