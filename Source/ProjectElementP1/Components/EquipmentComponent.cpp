@@ -34,7 +34,7 @@ void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UA
 void UEquipmentComponent::UseAbility(EAbilitySlot abilitySlot)
 {
 	if (IsSlotValid(abilitySlot))
-		GetAbility(abilitySlot)->Use();
+		GetAbility(abilitySlot)->HandleUse();
 }
 
 void UEquipmentComponent::StopAbility(EAbilitySlot abilitySlot)
@@ -43,8 +43,7 @@ void UEquipmentComponent::StopAbility(EAbilitySlot abilitySlot)
 		return;
 
 	UAbilityComponent* abilityPtr{ GetAbility(abilitySlot) };
-	abilityPtr->Stop();
-	abilityPtr->Reset();
+	abilityPtr->HandleStop();
 }
 
 // Called when the game starts
