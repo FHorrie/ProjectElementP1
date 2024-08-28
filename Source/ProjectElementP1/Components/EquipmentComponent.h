@@ -21,6 +21,8 @@ enum class EAbilitySlot : uint8
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAbilitySwitch, TSubclassOf<UAbilityComponent>, abilityType, EAbilitySlot, abilitySlot, const FString&, displayName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAbilityCooldown, EAbilitySlot, abilitySlot, float, cooldownTime);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAbilityCooldownReset, EAbilitySlot, abilitySlot);
 
 class UAbilityComponent;
 
@@ -47,15 +49,25 @@ public:
 	FOnAbilitySwitch AbilitySwitchDelegate {};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
 	FOnAbilitySwitch AbilityCreateDelegate {};
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
+	FOnAbilityCooldown AbilityCooldownDelegate{};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintAssignable)
+	FOnAbilityCooldownReset AbilityCooldownResetDelegate{};
 	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-	UAbilityComponent* CreateAbility(TSubclassOf<UAbilityComponent> abilityType) const;
+	UAbilityComponent* CreateAbility(TSubclassOf<UAbilityComponent> abilityType, EAbilitySlot abilitySlot) const;
+	UFUNCTION()
+	void HandleCooldown(float cooldownTime, UAbilityComponent* abilityPtr);
+	UFUNCTION()
+	void HandleCooldownReset(UAbilityComponent* abilityPtr);
 
 	bool IsSlotValid(EAbilitySlot abilitySlot) const;
+	EAbilitySlot GetSlot(UAbilityComponent* abilityPtr) const;
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))

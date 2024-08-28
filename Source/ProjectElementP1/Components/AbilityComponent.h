@@ -10,7 +10,10 @@
  * 
  */
 
+class PROJECTELEMENTP1_API UAbilityComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCooldown, float, cooldownTime, UAbilityComponent*, abilityPtr);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCooldownReset, UAbilityComponent*, abilityPtr);
 
 UCLASS(Blueprintable, Abstract)
 class PROJECTELEMENTP1_API UAbilityComponent : public UActorComponent
@@ -26,6 +29,9 @@ public:
 	const FString& GetAbilityName() const;
 
 	virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
+
+	FOnCooldown CooldownDelegate{};
+	FOnCooldownReset CooldownResetDelegate{};
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent)

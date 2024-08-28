@@ -54,15 +54,17 @@ void UAbilityComponent::ActivateCooldown()
 	if (Cooldown < FLT_EPSILON)
 		return;
 
-	m_AllowUse = false;
-
 	if (m_CooldownHandle.IsValid())
 		m_CooldownHandle.Invalidate();
 
+	CooldownDelegate.Broadcast(Cooldown, this);
+	
+	m_AllowUse = false;
 	FTimerDelegate delegate{};
 	delegate.BindLambda([this]()
 	{
 		this->Reset();
+		this->CooldownResetDelegate.Broadcast(this);
 	});
 	
 	GetWorld()->GetTimerManager().SetTimer(m_CooldownHandle, delegate, Cooldown, false, Cooldown);

@@ -26,7 +26,7 @@ void UEquipmentComponent::SwitchAbility(EAbilitySlot abilitySlot, TSubclassOf<UA
 	StopAbility(abilitySlot);
 	if (m_Abilities[abilityNr] != nullptr)
 		m_Abilities[abilityNr]->DestroyComponent();
-	m_Abilities[abilityNr] = CreateAbility(abilityType);
+	m_Abilities[abilityNr] = CreateAbility(abilityType, abilitySlot);
 
 	AbilitySwitchDelegate.Broadcast(abilityType, abilitySlot, m_Abilities[abilityNr]->GetAbilityName());
 }
@@ -64,22 +64,41 @@ void UEquipmentComponent::BeginPlay()
 	int idx{};
 	for (auto abilityType : AbilityTypes)
 	{
-		UAbilityComponent* abilityPtr{ CreateAbility(abilityType) };
+		const EAbilitySlot slot{ static_cast<EAbilitySlot>(idx) };
+		UAbilityComponent* abilityPtr{ CreateAbility(abilityType, slot) };
 		m_Abilities.Add(abilityPtr);
 		if(abilityPtr != nullptr)
-			AbilityCreateDelegate.Broadcast(abilityType, static_cast<EAbilitySlot>(idx), abilityPtr->GetAbilityName());
+			AbilityCreateDelegate.Broadcast(abilityType, slot, abilityPtr->GetAbilityName());
 		++idx;
 	}
 		
 }
 
-UAbilityComponent* UEquipmentComponent::CreateAbility(TSubclassOf<UAbilityComponent> abilityType) const
+UAbilityComponent* UEquipmentComponent::CreateAbility(TSubclassOf<UAbilityComponent> abilityType, EAbilitySlot abilitySlot) const
 {
 	if (abilityType == nullptr)
 		return nullptr;
 	UAbilityComponent* abilityPtr{ NewObject<UAbilityComponent>(GetOwner(), abilityType.Get()) };
 	abilityPtr->RegisterComponent();
+	abilityPtr->CooldownDelegate.AddDynamic(this, &UEquipmentComponent::HandleCooldown);
+	abilityPtr->CooldownResetDelegate.AddDynamic(this, &UEquipmentComponent::HandleCooldownReset);
 	return abilityPtr;
+}
+
+void UEquipmentComponent::HandleCooldown(float cooldownTime, UAbilityComponent* abilityPtr)
+{
+	const EAbilitySlot slot{ GetSlot(abilityPtr) };
+	if (slot == EAbilitySlot::none)
+		return;
+	AbilityCooldownDelegate.Broadcast(slot, cooldownTime);
+}
+
+void UEquipmentComponent::HandleCooldownReset(UAbilityComponent* abilityPtr)
+{
+	const EAbilitySlot slot{ GetSlot(abilityPtr) };
+	if (slot == EAbilitySlot::none)
+		return;
+	AbilityCooldownResetDelegate.Broadcast(slot);
 }
 
 bool UEquipmentComponent::IsSlotValid(EAbilitySlot abilitySlot) const
@@ -88,6 +107,12 @@ bool UEquipmentComponent::IsSlotValid(EAbilitySlot abilitySlot) const
 	if (abilitySlot > EAbilitySlot::NR_ABILITIES)
 		return false;
 	return m_Abilities[slotNr] != nullptr;
+}
+
+EAbilitySlot UEquipmentComponent::GetSlot(UAbilityComponent* abilityPtr) const
+{
+	const int idx{ m_Abilities.Find(abilityPtr) };
+	return (idx == -1) ? EAbilitySlot::none : static_cast<EAbilitySlot>(idx);
 }
 
 UAbilityComponent* UEquipmentComponent::GetAbility(EAbilitySlot abilitySlot) const
