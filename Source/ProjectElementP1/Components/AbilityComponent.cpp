@@ -16,6 +16,8 @@ void UAbilityComponent::HandleUse()
 	Use();
 	
 	m_WasUsed = true;
+	if (CooldownOnUse)
+		ActivateCooldown();
 }
 
 void UAbilityComponent::HandleStop()
@@ -45,7 +47,11 @@ void UAbilityComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
 
 void UAbilityComponent::Reset_Implementation()
 {
+	
+	if (GetWorld()->GetTimerManager().GetTimerRemaining(m_CooldownHandle) > FLT_EPSILON)
+		return;
 	m_CooldownHandle.Invalidate();
+	CooldownResetDelegate.Broadcast(this);
 	m_AllowUse = true;
 }
 
@@ -61,11 +67,7 @@ void UAbilityComponent::ActivateCooldown()
 	
 	m_AllowUse = false;
 	FTimerDelegate delegate{};
-	delegate.BindLambda([this]()
-	{
-		this->Reset();
-		this->CooldownResetDelegate.Broadcast(this);
-	});
+	delegate.BindUObject(this, &UAbilityComponent::Reset);
 	
 	GetWorld()->GetTimerManager().SetTimer(m_CooldownHandle, delegate, Cooldown, false, Cooldown);
 }
