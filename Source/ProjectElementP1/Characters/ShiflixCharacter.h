@@ -15,6 +15,9 @@ class PROJECTELEMENTP1_API AShiflixCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	USceneComponent* WeaponAttachment{};
+
 public:
 	// Sets default values for this character's properties
 	AShiflixCharacter();

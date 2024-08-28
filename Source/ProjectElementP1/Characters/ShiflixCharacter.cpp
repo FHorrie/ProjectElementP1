@@ -14,6 +14,8 @@ AShiflixCharacter::AShiflixCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	WeaponAttachment = CreateDefaultSubobject<USceneComponent>(TEXT("WeaponAttachment"));
+	WeaponAttachment->SetupAttachment(RootComponent);
 	Equipment = CreateDefaultSubobject<UEquipmentComponent>(TEXT("Equipment"));
 	DeathHandler = CreateDefaultSubobject<UDeathComponent>(TEXT("DeathHandler"));
 }
