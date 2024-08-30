@@ -3,9 +3,11 @@
 
 #include "EnemyController.h"
 
+#include "Navigation/CrowdFollowingComponent.h"
 
-AEnemyController::AEnemyController()
+
+AEnemyController::AEnemyController(const FObjectInitializer& ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = false;
+	CrowdFollowingComponent = CreateDefaultSubobject<UCrowdFollowingComponent>(TEXT("CrowdComponent"));
 }
-

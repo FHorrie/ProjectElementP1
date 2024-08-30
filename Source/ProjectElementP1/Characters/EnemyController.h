@@ -8,18 +8,23 @@
 #include "ProjectElementP1/Components/EquipmentComponent.h"
 #include "EnemyController.generated.h"
 
+class UCrowdFollowingComponent;
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityUse, EAbilitySlot);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityStop, EAbilitySlot);
 
 UCLASS()
-class PROJECTELEMENTP1_API AEnemyController final : public AAIController
+class PROJECTELEMENTP1_API AEnemyController : public AAIController
 {
 	GENERATED_BODY()
 
 public:
-	AEnemyController();
+	AEnemyController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	
 	// Delegates
 	FOnAbilityUse OnAbilityUse{};
 	FOnAbilityStop OnAbilityStop{};
+
+private:
+	UPROPERTY()
+	UCrowdFollowingComponent* CrowdFollowingComponent{};
 };
